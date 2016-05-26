@@ -18,5 +18,6 @@
 @property NSString *dataTweetContent;
 @property NSString *dataImageURL;
 @property UIImage *userImage;
+@property NSString *dataTweetID;
 
 @end
