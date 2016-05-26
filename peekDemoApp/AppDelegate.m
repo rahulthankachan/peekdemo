@@ -20,7 +20,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [[Twitter sharedInstance]startWithConsumerKey:@"" consumerSecret:@""];
+    [[Twitter sharedInstance]startWithConsumerKey:@"c2NoiAgkP6yIFxDhtsXI01DXF" consumerSecret:@"GT8y4C0BRC3GiN82wYv7u48lgcCq8hhy4CqKgxxiNkfrvIFrG4"];
     [Fabric with:@[[Twitter class]]];
     return YES;
 }
