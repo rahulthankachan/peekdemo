@@ -11,6 +11,7 @@
 		2E2F611F1CF6DE6300D9CAC9 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E2F611B1CF6DE6300D9CAC9 /* TwitterKit.framework */; };
 		2E2F61201CF6DE6300D9CAC9 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2E2F611C1CF6DE6300D9CAC9 /* TwitterKitResources.bundle */; };
 		2E2F61211CF6DE6300D9CAC9 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E2F611D1CF6DE6300D9CAC9 /* TwitterCore.framework */; };
+		2E2F61231CF6EC4700D9CAC9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2E2F61221CF6EC4700D9CAC9 /* .gitignore */; };
 		2EF2A3FF1CF6B49F002E339A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF2A3FE1CF6B49F002E339A /* main.m */; };
 		2EF2A4021CF6B49F002E339A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF2A4011CF6B49F002E339A /* AppDelegate.m */; };
 		2EF2A4051CF6B49F002E339A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF2A4041CF6B49F002E339A /* ViewController.m */; };
@@ -24,6 +25,7 @@
 		2E2F611B1CF6DE6300D9CAC9 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		2E2F611C1CF6DE6300D9CAC9 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TwitterKitResources.bundle; path = TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle; sourceTree = "<group>"; };
 		2E2F611D1CF6DE6300D9CAC9 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterCore.framework; sourceTree = "<group>"; };
+		2E2F61221CF6EC4700D9CAC9 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		2EF2A3FA1CF6B49F002E339A /* peekDemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = peekDemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EF2A3FE1CF6B49F002E339A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2EF2A4001CF6B49F002E339A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				2EF2A40B1CF6B49F002E339A /* LaunchScreen.storyboard */,
 				2EF2A40E1CF6B49F002E339A /* Info.plist */,
 				2EF2A3FD1CF6B49F002E339A /* Supporting Files */,
+				2E2F61221CF6EC4700D9CAC9 /* .gitignore */,
 			);
 			path = peekDemoApp;
 			sourceTree = "<group>";
@@ -152,6 +155,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E2F61231CF6EC4700D9CAC9 /* .gitignore in Resources */,
 				2E2F61201CF6DE6300D9CAC9 /* TwitterKitResources.bundle in Resources */,
 				2EF2A40D1CF6B49F002E339A /* LaunchScreen.storyboard in Resources */,
 				2EF2A40A1CF6B49F002E339A /* Assets.xcassets in Resources */,
