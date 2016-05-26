@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E2F611E1CF6DE6300D9CAC9 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E2F611A1CF6DE6300D9CAC9 /* Fabric.framework */; };
+		2E2F611F1CF6DE6300D9CAC9 /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E2F611B1CF6DE6300D9CAC9 /* TwitterKit.framework */; };
+		2E2F61201CF6DE6300D9CAC9 /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2E2F611C1CF6DE6300D9CAC9 /* TwitterKitResources.bundle */; };
+		2E2F61211CF6DE6300D9CAC9 /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E2F611D1CF6DE6300D9CAC9 /* TwitterCore.framework */; };
 		2EF2A3FF1CF6B49F002E339A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF2A3FE1CF6B49F002E339A /* main.m */; };
 		2EF2A4021CF6B49F002E339A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF2A4011CF6B49F002E339A /* AppDelegate.m */; };
 		2EF2A4051CF6B49F002E339A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EF2A4041CF6B49F002E339A /* ViewController.m */; };
@@ -16,6 +20,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2E2F611A1CF6DE6300D9CAC9 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		2E2F611B1CF6DE6300D9CAC9 /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
+		2E2F611C1CF6DE6300D9CAC9 /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TwitterKitResources.bundle; path = TwitterKit.framework/Versions/A/Resources/TwitterKitResources.bundle; sourceTree = "<group>"; };
+		2E2F611D1CF6DE6300D9CAC9 /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterCore.framework; sourceTree = "<group>"; };
 		2EF2A3FA1CF6B49F002E339A /* peekDemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = peekDemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EF2A3FE1CF6B49F002E339A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2EF2A4001CF6B49F002E339A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -33,6 +41,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E2F611E1CF6DE6300D9CAC9 /* Fabric.framework in Frameworks */,
+				2E2F61211CF6DE6300D9CAC9 /* TwitterCore.framework in Frameworks */,
+				2E2F611F1CF6DE6300D9CAC9 /* TwitterKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +55,10 @@
 			children = (
 				2EF2A3FC1CF6B49F002E339A /* peekDemoApp */,
 				2EF2A3FB1CF6B49F002E339A /* Products */,
+				2E2F611A1CF6DE6300D9CAC9 /* Fabric.framework */,
+				2E2F611B1CF6DE6300D9CAC9 /* TwitterKit.framework */,
+				2E2F611C1CF6DE6300D9CAC9 /* TwitterKitResources.bundle */,
+				2E2F611D1CF6DE6300D9CAC9 /* TwitterCore.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -89,6 +104,7 @@
 				2EF2A3F61CF6B49F002E339A /* Sources */,
 				2EF2A3F71CF6B49F002E339A /* Frameworks */,
 				2EF2A3F81CF6B49F002E339A /* Resources */,
+				2E2F61191CF6DDF500D9CAC9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -136,6 +152,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E2F61201CF6DE6300D9CAC9 /* TwitterKitResources.bundle in Resources */,
 				2EF2A40D1CF6B49F002E339A /* LaunchScreen.storyboard in Resources */,
 				2EF2A40A1CF6B49F002E339A /* Assets.xcassets in Resources */,
 				2EF2A4081CF6B49F002E339A /* Main.storyboard in Resources */,
@@ -143,6 +160,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2E2F61191CF6DDF500D9CAC9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 10e97e7cd5f3d0b6664aa6e8365a5056d7180c86 5069aba46001328a15550d98e8fa219b88bb96a151777e85c30553813dc6c81c";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2EF2A3F61CF6B49F002E339A /* Sources */ = {
@@ -263,6 +296,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = peekDemoApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rahulthankachan.peekDemoApp;
@@ -274,6 +311,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = peekDemoApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rahulthankachan.peekDemoApp;
@@ -300,6 +341,7 @@
 				2EF2A4131CF6B49F002E339A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
