@@ -7,7 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface TweetData : NSObject
+@interface TweetData : NSObject {
+
+
+}
+
+@property NSString *dataUserName;
+@property NSString *dataTweetContent;
+@property NSString *dataImageURL;
+@property UIImage *userImage;
 
 @end

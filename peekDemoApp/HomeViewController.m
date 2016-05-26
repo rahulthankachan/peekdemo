@@ -11,12 +11,17 @@
 #import <TwitterKit/TwitterKit.h>
 #import "TweetData.h"
 #import "SBJSON.h"
+#import "TweetViewCell.h"
+#import "UIScrollView+SVPullToRefresh.h"
+#import "UIScrollView+SVInfiniteScrolling.h"
+
 
 @interface HomeViewController () {
 
     NSMutableArray * tweets;
     NSMutableDictionary *tweetDict;
 }
+@property (weak, nonatomic) IBOutlet UITableView *tableViewTweets;
 
 @end
 
@@ -35,7 +40,7 @@
     
 
     NSString *statusesShowEndpoint = @"https://api.twitter.com/1.1/search/tweets.json";
-    NSDictionary *params = @{@"q" : @"%40peek", @"count" : @"2", @"result_type": @"recent"};
+    NSDictionary *params = @{@"q" : @"%40peek", @"count" : @"10", @"result_type": @"recent"};
     NSError *clientError;
     
     NSURLRequest *request = [client URLRequestWithMethod:@"GET" URL:statusesShowEndpoint parameters:params error:&clientError];
@@ -69,8 +74,19 @@
 
 -(void)tweetsReceived: (NSMutableDictionary*) mine{
     NSArray * segments = [mine objectForKey:@"statuses"];
-    NSDictionary *tempSegment= [segments objectAtIndex:0];
-    NSString * text = [tempSegment objectForKey:@"text"];
+    
+    for (NSDictionary *tempSegment in segments) {
+        TweetData *tweet = [[TweetData alloc]init];
+        tweet.dataTweetContent = [tempSegment objectForKey:@"text"];
+        NSDictionary *user = [tempSegment objectForKey:@"user"];
+        tweet.dataUserName = [user objectForKey:@"name"];
+        tweet.dataImageURL = [user objectForKey:@"profile_image_url_https"];
+        [tweets addObject:tweet];
+    }
+    
+    [_tableViewTweets reloadData];
+    
+
     
 }
 - (void)didReceiveMemoryWarning {
@@ -87,5 +103,80 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+
+
+
+#pragma mark Data Model Handlers
+
+
+
+
+
+#pragma mark TableView Delegate Methods
+
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return [tweets count];
+}
+
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    TweetViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"tweet" forIndexPath:indexPath];
+    
+    TweetData *currentTweet = [tweets objectAtIndex:indexPath.row];
+    cell.tweetUserName.text = currentTweet.dataUserName;
+    cell.tweetContent.text = currentTweet.dataTweetContent;
+    
+    
+    if (currentTweet.userImage!=nil) {
+        
+        cell.tweetUserImage.image = currentTweet.userImage;
+    
+    } else {
+        
+        NSURL *url1 = [NSURL URLWithString:currentTweet.dataImageURL];
+        
+        [self downloadImageWithURL:url1 completionBlock:^(BOOL succeeded, UIImage *image) {
+            if (succeeded) {
+                cell.tweetUserImage.image = image;
+                currentTweet.userImage = image;
+                
+            }
+        }];
+        
+    
+    }
+    
+    
+    
+    return cell;
+}
+
+
+- (void)downloadImageWithURL:(NSURL *)url completionBlock:(void (^)(BOOL succeeded, UIImage *image))completionBlock
+{
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                               if ( !error )
+                               {
+                                   UIImage *image = [[UIImage alloc] initWithData:data];
+                                   completionBlock(YES,image);
+                               } else{
+                                   completionBlock(NO,nil);
+                               }
+                           }];
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    
+    return 1;
+    
+}
+
+
 
 @end
