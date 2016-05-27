@@ -59,16 +59,16 @@
             if (data) {
                 // handle the response data e.g.
                 NSError *jsonError1;
-                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError1];
-               NSLog([json description]);
+               NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError1];
+              // NSLog([json description]);
                 
-                NSString *stringData= [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:nil];
+                //NSString *stringData= [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];
                 
-                SBJSON *jsonParser= [[SBJSON alloc]init];
-                NSError *jsonError;
+                //SBJSON *jsonParser= [[SBJSON alloc]init];
+                //NSError *jsonError;
 
-                tweetDict= [jsonParser objectWithString:stringData error:&jsonError];
-                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:tweetDict waitUntilDone:NO];
+                //tweetDict= [jsonParser objectWithString:stringData error:&jsonError];
+                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:json waitUntilDone:NO];
             }
             else {
                 NSLog(@"Error: %@", connectionError);
@@ -115,15 +115,15 @@
                 // handle the response data e.g.
                 NSError *jsonError1;
                 NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError1];
-                NSLog([json description]);
+               /// NSLog([json description]);
                 
-                NSString *stringData= [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:nil];
+             ///   NSString *stringData= [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:nil];
                 
-                SBJSON *jsonParser= [[SBJSON alloc]init];
+               // SBJSON *jsonParser= [[SBJSON alloc]init];
                 NSError *jsonError;
                 
-                tweetDict= [jsonParser objectWithString:stringData error:&jsonError];
-                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:tweetDict waitUntilDone:NO];
+              //  tweetDict= [jsonParser objectWithString:stringData error:&jsonError];
+                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:json waitUntilDone:NO];
             }
             else {
                 NSLog(@"Error: %@", connectionError);
@@ -155,15 +155,15 @@
                 // handle the response data e.g.
                 NSError *jsonError1;
                 NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError1];
-                NSLog([json description]);
+               // NSLog([json description]);
                 
-                NSString *stringData= [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:nil];
+               // NSString *stringData= [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:nil];
                 
-                SBJSON *jsonParser= [[SBJSON alloc]init];
-                NSError *jsonError;
+               // SBJSON *jsonParser= [[SBJSON alloc]init];
+                //NSError *jsonError;
                 
-                tweetDict= [jsonParser objectWithString:stringData error:&jsonError];
-                [self performSelectorOnMainThread:@selector(tweetsReceivedBegin:) withObject:tweetDict waitUntilDone:NO];
+               // tweetDict= [jsonParser objectWithString:stringData error:&jsonError];
+                [self performSelectorOnMainThread:@selector(tweetsReceivedBegin:) withObject:json waitUntilDone:NO];
             }
             else {
                 NSLog(@"Error: %@", connectionError);
