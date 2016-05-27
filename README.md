@@ -23,7 +23,7 @@ TO NOTE
 
 ###Screenshots!
 
-[ScreenSho1] (https://github.com/rahulthankachan/peekdemo/blob/master/IMG_1815.jpg)
+[https://github.com/rahulthankachan/peekdemo/blob/master/IMG_1815.jpg]
 
 
 
