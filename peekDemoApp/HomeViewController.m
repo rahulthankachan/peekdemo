@@ -37,8 +37,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   // toSearch = @"%40Peek";
-    toSearch = @"%40Twitter";
+   toSearch = @"%40Peek";
+ //toSearch = @"%40Twitter";
     
     
     currentMaxID = @"";
@@ -191,11 +191,6 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [weakSelf.tableViewTweets beginUpdates];
-        //TweetData *myCopy = [tweets lastObject];
-        
-    
-        //[tweets insertObject:myCopy atIndex:0];
-       // [weakSelf.tableViewTweets insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
         [weakSelf.tableViewTweets endUpdates];
         
         [weakSelf.tableViewTweets.pullToRefreshView stopAnimating];
@@ -224,7 +219,7 @@
 
 
 
-
+#pragma mark Tweet Handling
 
 
 -(void)tweetsReceived: (NSMutableDictionary*) mine{
@@ -276,7 +271,7 @@
         
     }
     
-    /// This will update the current counterns for the max and since
+    /// This will update the current counters for the max and since
     [self updateFirstAndLastIdAfterLoad];
     
     [_tableViewTweets reloadData];
@@ -303,26 +298,47 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-
-
-
-#pragma mark Data Model Handlers
-
-
-
-
-
 #pragma mark TableView Delegate Methods
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    TWTRComposer *composer = [[TWTRComposer alloc] init];
+    
+    TweetData *selectedTweet = [tweets objectAtIndex:indexPath.row];
+    [composer setText:selectedTweet.dataTweetContent];
+    
+    // Called from a UIViewController
+    [composer showFromViewController:self completion:^(TWTRComposerResult result) {
+        if (result == TWTRComposerResultCancelled) {
+            NSLog(@"Tweet composition cancelled");
+        }
+        else {
+            UIAlertController *viewController = [UIAlertController alertControllerWithTitle:@"Twitter Message Sent" message:@"Yay!!" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *success = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [viewController addAction:success];
+            [self presentViewController:viewController animated:YES completion:nil];
+        }
+    }];
+    
+
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+
+        [tweets removeObjectAtIndex:indexPath.row];
+        [_tableViewTweets reloadData];
+    }
+}
+
+
+
+
+#pragma mark TableView DataSource Methods
 
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
