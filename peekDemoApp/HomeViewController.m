@@ -10,11 +10,11 @@
 #import <Fabric/Fabric.h>
 #import <TwitterKit/TwitterKit.h>
 #import "TweetData.h"
-#import "SBJSON.h"
 #import "TweetViewCell.h"
 #import "UIScrollView+SVPullToRefresh.h"
 #import "UIScrollView+SVInfiniteScrolling.h"
 #import "UIColor+ColorModule.h"
+#import "Enums.h"
 
 
 @interface HomeViewController () {
@@ -60,8 +60,12 @@
                 // handle the response data e.g.
                 NSError *jsonError1;
                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError1];
+               
+                NSMutableArray *tweetArray = [[NSMutableArray alloc]init];
+                [tweetArray addObject:json];
+                [tweetArray addObject:[NSNumber numberWithInteger:kInsertPositionBottom]];
 
-                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:json waitUntilDone:NO];
+                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:tweetArray waitUntilDone:NO];
             }
             else {
                 NSLog(@"Error: %@", connectionError);
@@ -72,21 +76,16 @@
         NSLog(@"Error: %@", clientError);
     }
     
-    
-    
-    
-    
-    
-    __weak HomeViewController *weakSelf = self;
+    self.tableViewTweets.showsPullToRefresh = YES;
     
     // setup pull-to-refresh
     [self.tableViewTweets addPullToRefreshWithActionHandler:^{
-        [weakSelf insertRowAtTop];
+        [self insertRowAtTop];
     }];
     
     // setup infinite scrolling
     [self.tableViewTweets addInfiniteScrollingWithActionHandler:^{
-        [weakSelf insertRowAtBottom];
+        [self insertRowAtBottom];
     }];
 
 }
@@ -108,9 +107,11 @@
                 // handle the response data e.g.
                 NSError *jsonError1;
                 NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError1];
-
-                NSError *jsonError;
-                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:json waitUntilDone:NO];
+                NSMutableArray *tweetArray = [[NSMutableArray alloc]init];
+                [tweetArray addObject:json];
+                [tweetArray addObject:[NSNumber numberWithInteger:kInsertPositionBottom]];
+                
+                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:tweetArray waitUntilDone:NO];
             }
             else {
                 NSLog(@"Error: %@", connectionError);
@@ -142,7 +143,11 @@
                 NSError *jsonError1;
                 NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError1];
 
-                [self performSelectorOnMainThread:@selector(tweetsReceivedBegin:) withObject:json waitUntilDone:NO];
+                NSMutableArray *tweetArray = [[NSMutableArray alloc]init];
+                [tweetArray addObject:json];
+                [tweetArray addObject:[NSNumber numberWithInteger:kInsertPositionTop]];
+                
+                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:tweetArray waitUntilDone:NO];
             }
             else {
                 NSLog(@"Error: %@", connectionError);
@@ -166,7 +171,7 @@
     
     [self getLatestTweets];
     
-    int64_t delayInSeconds = 2.0;
+    int64_t delayInSeconds = 0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [weakSelf.tableViewTweets beginUpdates];
@@ -184,7 +189,7 @@
     __weak HomeViewController *weakSelf = self;
     [self getOlderTweets];
     
-    int64_t delayInSeconds = 2.0;
+    int64_t delayInSeconds = 0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [weakSelf.tableViewTweets beginUpdates];
@@ -201,8 +206,12 @@
 #pragma mark Tweet Handling
 
 
--(void)tweetsReceived: (NSMutableDictionary*) mine{
-    NSArray * segments = [mine objectForKey:@"statuses"];
+-(void)tweetsReceived: (NSMutableArray*) mine{
+    NSDictionary * segmentsD = [mine objectAtIndex:0];
+    NSArray *segments  = [segmentsD objectForKey:@"statuses"];
+    NSNumber *pos = [mine objectAtIndex:1];
+    InsertPosition position = (InsertPosition)[pos integerValue];
+    
     
     for (NSDictionary *tempSegment in segments) {
         
@@ -213,7 +222,12 @@
         tweet.dataImageURL = [user objectForKey:@"profile_image_url_https"];
         tweet.dataTweetID = [tempSegment objectForKey:@"id_str"];
         if (![tweet.dataTweetID isEqualToString:currentSinceId] && ![tweet.dataTweetID isEqualToString:currentMaxID]) {
-            [tweets addObject:tweet];
+            
+                if (position == kInsertPositionTop) {
+                            [tweets insertObject:tweet atIndex:0];
+                } else {
+                            [tweets addObject:tweet];
+                    }
         
         }
         
@@ -224,40 +238,12 @@
     
     
     
-    [_tableViewTweets reloadData];
+    [self.tableViewTweets reloadData];
     
 
     
 }
 
-
-
--(void)tweetsReceivedBegin: (NSMutableDictionary*) mine{
-    NSArray * segments = [mine objectForKey:@"statuses"];
-    
-    for (NSDictionary *tempSegment in segments) {
-        
-        TweetData *tweet = [[TweetData alloc]init];
-        tweet.dataTweetContent = [tempSegment objectForKey:@"text"];
-        NSDictionary *user = [tempSegment objectForKey:@"user"];
-        tweet.dataUserName = [user objectForKey:@"name"];
-        tweet.dataImageURL = [user objectForKey:@"profile_image_url_https"];
-        tweet.dataTweetID = [tempSegment objectForKey:@"id_str"];
-        if (![tweet.dataTweetID isEqualToString:currentSinceId] && ![tweet.dataTweetID isEqualToString:currentMaxID]) {
-            [tweets insertObject:tweet atIndex:0];
-            
-        }
-        
-    }
-    
-    /// This will update the current counters for the max and since
-    [self updateFirstAndLastIdAfterLoad];
-    
-    [_tableViewTweets reloadData];
-    
-    
-    
-}
 
 
 #pragma update Max and Since
@@ -281,23 +267,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    TWTRComposer *composer = [[TWTRComposer alloc] init];
-    
-    TweetData *selectedTweet = [tweets objectAtIndex:indexPath.row];
-    [composer setText:selectedTweet.dataTweetContent];
-    
-    // Called from a UIViewController
-    [composer showFromViewController:self completion:^(TWTRComposerResult result) {
-        if (result == TWTRComposerResultCancelled) {
-            NSLog(@"Tweet composition cancelled");
-        }
-        else {
-            UIAlertController *viewController = [UIAlertController alertControllerWithTitle:@"Twitter Message Sent" message:@"Yay!!" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *success = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-            [viewController addAction:success];
-            [self presentViewController:viewController animated:YES completion:nil];
-        }
-    }];
+
     
 
 }
@@ -310,7 +280,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
 
         [tweets removeObjectAtIndex:indexPath.row];
-        [_tableViewTweets reloadData];
+        [self.tableViewTweets reloadData];
     }
 }
 
@@ -332,6 +302,9 @@
     TweetData *currentTweet = [tweets objectAtIndex:indexPath.row];
     cell.tweetUserName.text = currentTweet.dataUserName;
     cell.tweetContent.text = currentTweet.dataTweetContent;
+    
+    cell.retweetB.tag = indexPath.row;
+    [cell.retweetB addTarget:self action:@selector(tweetButtonSelectedForRow:) forControlEvents:UIControlEventTouchUpInside];
     
     if (indexPath.row%2) {
         cell.backgroundColor = [UIColor kColorRow1];
@@ -385,6 +358,32 @@
     
     return 1;
     
+}
+
+
+-(void)tweetButtonSelectedForRow:(UIButton*)rowButton {
+    
+    NSInteger rowSelected = rowButton.tag;
+    
+    TWTRComposer *composer = [[TWTRComposer alloc] init];
+    
+    TweetData *selectedTweet = [tweets objectAtIndex:rowSelected];
+    [composer setText:selectedTweet.dataTweetContent];
+    
+    // Called from a UIViewController
+    [composer showFromViewController:self completion:^(TWTRComposerResult result) {
+        if (result == TWTRComposerResultCancelled) {
+            NSLog(@"Tweet composition cancelled");
+        }
+        else {
+            UIAlertController *viewController = [UIAlertController alertControllerWithTitle:@"Twitter Message Sent" message:@"Yay!!" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *success = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [viewController addAction:success];
+            [self presentViewController:viewController animated:YES completion:nil];
+        }
+    }];
+    
+
 }
 
 

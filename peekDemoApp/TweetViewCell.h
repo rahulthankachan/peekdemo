@@ -15,5 +15,6 @@
 @property (weak,nonatomic) IBOutlet UILabel *tweetUserName;
 @property (weak,nonatomic) IBOutlet UILabel *tweetContent;
 @property (weak,nonatomic) IBOutlet UIImageView *tweetUserImage;
+@property (weak, nonatomic) IBOutlet UIButton *retweetB;
 
 @end
