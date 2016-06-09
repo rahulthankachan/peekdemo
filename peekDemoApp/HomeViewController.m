@@ -40,6 +40,9 @@
    toSearch = @"%40Peek";
  //toSearch = @"%40Twitter";
     
+    self.tableViewTweets.estimatedRowHeight = 100.0;
+    self.tableViewTweets.rowHeight = UITableViewAutomaticDimension;
+    
     
     currentMaxID = @"";
     currentSinceId = @"";
@@ -76,7 +79,7 @@
         NSLog(@"Error: %@", clientError);
     }
     
-    self.tableViewTweets.showsPullToRefresh = YES;
+    //self.tableViewTweets.showsPullToRefresh = YES;
     
     // setup pull-to-refresh
     [self.tableViewTweets addPullToRefreshWithActionHandler:^{
@@ -111,7 +114,7 @@
                 [tweetArray addObject:json];
                 [tweetArray addObject:[NSNumber numberWithInteger:kInsertPositionBottom]];
                 
-                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:tweetArray waitUntilDone:NO];
+                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:tweetArray waitUntilDone:YES];
             }
             else {
                 NSLog(@"Error: %@", connectionError);
@@ -147,7 +150,7 @@
                 [tweetArray addObject:json];
                 [tweetArray addObject:[NSNumber numberWithInteger:kInsertPositionTop]];
                 
-                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:tweetArray waitUntilDone:NO];
+                [self performSelectorOnMainThread:@selector(tweetsReceived:) withObject:tweetArray waitUntilDone:YES];
             }
             else {
                 NSLog(@"Error: %@", connectionError);
@@ -167,18 +170,12 @@
 #pragma mark Infinite and Pull to Refresh
 
 - (void)insertRowAtTop {
-    __weak HomeViewController *weakSelf = self;
     
     [self getLatestTweets];
     
-    int64_t delayInSeconds = 0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [weakSelf.tableViewTweets beginUpdates];
-        [weakSelf.tableViewTweets endUpdates];
-        
-        [weakSelf.tableViewTweets.pullToRefreshView stopAnimating];
-    });
+
+    
+
 }
 
 
@@ -186,18 +183,10 @@
 
 #pragma mark inserrow at bottom
 - (void)insertRowAtBottom {
-    __weak HomeViewController *weakSelf = self;
+
     [self getOlderTweets];
     
-    int64_t delayInSeconds = 0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [weakSelf.tableViewTweets beginUpdates];
-        
-        [weakSelf.tableViewTweets endUpdates];
-    
-        [weakSelf.tableViewTweets.infiniteScrollingView stopAnimating];
-    });
+
 }
 
 
@@ -221,6 +210,7 @@
         tweet.dataUserName = [user objectForKey:@"name"];
         tweet.dataImageURL = [user objectForKey:@"profile_image_url_https"];
         tweet.dataTweetID = [tempSegment objectForKey:@"id_str"];
+        
         if (![tweet.dataTweetID isEqualToString:currentSinceId] && ![tweet.dataTweetID isEqualToString:currentMaxID]) {
             
                 if (position == kInsertPositionTop) {
@@ -231,18 +221,37 @@
         
         }
         
+       
+        
     }
-    
-    /// This will update the current counterns for the max and since
-    [self updateFirstAndLastIdAfterLoad];
+     [self updateFirstAndLastIdAfterLoad];
     
     
     
-    [self.tableViewTweets reloadData];
+//        [self.tableViewTweets beginUpdates];
+
+        [self.tableViewTweets reloadData];
+
+        
+        [self.tableViewTweets.pullToRefreshView stopAnimating];
+        [self.tableViewTweets.infiniteScrollingView stopAnimating];
+
     
 
     
 }
+
+//
+//int64_t delayInSeconds = 2.0;
+//dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//    [weakSelf.tableView beginUpdates];
+//    [weakSelf.dataSource insertObject:[NSDate date] atIndex:0];
+//    [weakSelf.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+//    [weakSelf.tableView endUpdates];
+//    
+//    [weakSelf.tableView.pullToRefreshView stopAnimating];
+//});
 
 
 
@@ -280,6 +289,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
 
         [tweets removeObjectAtIndex:indexPath.row];
+        [self updateFirstAndLastIdAfterLoad];
         [self.tableViewTweets reloadData];
     }
 }
